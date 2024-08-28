@@ -3,30 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Créditos Básico</title>
+    <title>Simulador de Créditos</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Simulador de Créditos</h1>
-    <form id="formularioCredito">
-        <label for="monto">Monto del crédito:</label>
-        <input type="number" id="monto" required><br><br>
+    <div class="container">
+        <h1>Simulador de Créditos</h1>
+        <form id="formularioCredito">
+            <label for="monto">Monto del crédito:</label>
+            <input type="number" id="monto" required><br><br>
+            
+            <label for="interes">Tasa de interés (%):</label>
+            <input type="number" id="interes" required><br><br>
+            
+            <label for="años">Años:</label>
+            <input type="number" id="años" required><br><br>
+            
+            <button type="button" onclick="calcularCredito()">Calcular</button>
+        </form>
         
-        <label for="interes">Tasa de interés (%):</label>
-        <input type="number" id="interes" required><br><br>
-        
-        <label for="años">Años:</label>
-        <input type="number" id="años" required><br><br>
-        
-        <button type="button" onclick="calcularCredito()">Calcular</button>
-    </form>
-    
-    <h2>Resultado</h2>
-    <p id="resultado"></p>
+        <h2>Resultado</h2>
+        <p id="resultado"></p>
+        <table id="tablaPagos" border="1">
+            <thead>
+                <tr>
+                    <th>Mes</th>
+                    <th>Pago Mensual</th>
+                    <th>Saldo Restante</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
     <script src="./simulador.js"></script>
 </body>
 </html>
-
-
-
-
