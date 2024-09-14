@@ -1,5 +1,5 @@
 body {
-    background-color: gold;
+    background-color: chocolate;
     font-family: Arial, sans-serif;
 }
 
@@ -24,7 +24,7 @@ h1, h2 {
 }
 
 .moneda-img:hover {
-    transform: scale(1.2);
+    transform: scale(1.5);
 }
 
 #moneda {
