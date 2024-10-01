@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador de Créditos</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -64,6 +65,38 @@
             </thead>
             <tbody></tbody>
         </table>
+        
+        <canvas id="myChart" width="400" height="200"></canvas>
+
+        <form id="formularioSolicitud" class="oculto">
+            <h2>Solicitud de Crédito</h2>
+            <label for="dni">DNI:</label>
+            <input type="text" id="dni" required><br><br>
+            
+            <label for="cuil">CUIL:</label>
+            <input type="text" id="cuil" required><br><br>
+            
+            <label for="pais">País:</label>
+            <input type="text" id="pais" required><br><br>
+
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" required><br><br>
+            
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" id="ciudad" required><br><br>
+            
+            <label for="codigoPostal">Código Postal:</label>
+            <input type="text" id="codigoPostal" required><br><br>
+            
+            <label for="telefono">Número de Teléfono:</label>
+            <input type="text" id="telefono" required><br><br>
+            
+            
+            
+            <button type="submit">Enviar Solicitud</button>
+        </form>
+        
+        <div id="mensajeSolicitud" class="oculto"></div>
     </div>
 
     <script src="./simulador.js"></script>

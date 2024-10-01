@@ -16,17 +16,12 @@ document.getElementById('btnContinuar').addEventListener('click', () => {
 document.querySelectorAll('input[name="moneda"]').forEach((input) => {
     input.addEventListener('change', () => {
         const interesInput = document.getElementById('interes');
-        switch (input.value) {
-            case 'pesos':
-                interesInput.value = 85;
-                break;
-            case 'dolares':
-                interesInput.value = 105;
-                break;
-            case 'euros':
-                interesInput.value = 110;
-                break;
-        }
+        fetch('datos.json')
+            .then(response => response.json())
+            .then(data => {
+                interesInput.value = data.tasas[input.value];
+            })
+            .catch(error => console.error('Error al cargar el JSON:', error));
     });
 });
 
@@ -55,8 +50,8 @@ function calcularCredito() {
     let saldoRestante = montoTotal;
     let pagoMensual = montoTotal * interesMensual / (1 - Math.pow(1 + interesMensual, -mesesTotales));
 
-    tablaPagos.innerHTML = ''; // Limpiar tabla
-    pagosMensuales = []; // Limpiar array
+    tablaPagos.innerHTML = ''; 
+    pagosMensuales = []; 
 
     for (let i = 1; i <= mesesTotales; i++) {
         saldoRestante -= pagoMensual - saldoRestante * interesMensual;
@@ -71,6 +66,8 @@ function calcularCredito() {
     mostrarMensaje(`Monto total a pagar en ${moneda}: $${(pagoMensual * mesesTotales).toFixed(2)}`);
     actualizarTablaPagos(pagosMensuales);
     guardarDatos();
+    actualizarGrafico();
+    mostrarFormularioSolicitud();
 }
 
 function mostrarMensaje(mensaje) {
@@ -86,7 +83,7 @@ function mostrarMensajeEdad(mensaje) {
 
 function actualizarTablaPagos(pagosMensuales) {
     const tablaPagos = document.getElementById('tablaPagos').getElementsByTagName('tbody')[0];
-    tablaPagos.innerHTML = ''; // Limpiar tabla
+    tablaPagos.innerHTML = ''; 
 
     pagosMensuales.forEach(pago => {
         let fila = tablaPagos.insertRow();
@@ -106,21 +103,49 @@ function guardarDatos() {
     localStorage.setItem('datosCredito', JSON.stringify(datos));
 }
 
-function cargarDatos() {
-    const datos = JSON.parse(localStorage.getItem('datosCredito'));
-    if (datos) {
-        document.getElementById('moneda').value = datos.moneda;
-        document.getElementById('monto').value = datos.monto;
-        document.getElementById('interes').value = datos.interes;
-        document.getElementById('años').value = datos.años;
-    }
+function actualizarGrafico() {
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: pagosMensuales.map(pago => pago.mes),
+            datasets: [{
+                label: 'Saldo Restante',
+                data: pagosMensuales.map(pago => pago.saldo),
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    cargarDatos();
-});
+function mostrarFormularioSolicitud() {
+    document.getElementById('formularioSolicitud').style.display = 'block';
+}
 
 document.getElementById('formularioCredito').addEventListener('submit', (event) => {
     event.preventDefault();
     calcularCredito();
 });
+
+document.getElementById('formularioSolicitud').addEventListener('submit', (event) => {
+    event.preventDefault();
+    mostrarMensajeSolicitud();
+});
+
+function mostrarMensajeSolicitud() {
+    const mensajeSolicitud = document.getElementById('mensajeSolicitud');
+    mensajeSolicitud.innerHTML = `
+        <h2>Solicitud Enviada</h2>
+        <p>Gracias por enviar tu solicitud. Nos pondremos en contacto luego de revisar tu VERAZ.</p>
+    `;
+    mensajeSolicitud.style.display = 'block';
+    document.getElementById('formularioSolicitud').style.display = 'none';
+}
